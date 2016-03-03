@@ -53,8 +53,8 @@ exports.handler = function(event, context) {
 function getMongoInfo () {
   return {
     name: db.name,
-    user: db.user,
-    pass: db.pass,
+    // user: db.user,
+    // pass: db.pass,
     host: db.host,
     port: db.port
   };
