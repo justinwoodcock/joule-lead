@@ -13,6 +13,7 @@
 var Response = require('joule-node-response');
 var mongoose = require('mongoose');
 var mongoUri = process.env.MongoUri;
+var Lead = require('./models/lead.js');
 
 mongoose.connect(mongoUri);
 var db = mongoose.connection;
@@ -30,13 +31,18 @@ db.on('error', console.error.bind(console, 'connection error:'));
 exports.handler = function(event, context) {
   var response = new Response();
   response.setContext(context);
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
 
   switch (event.httpMethod) {
     case 'GET':
-      var res = getMongoInfo();
+      var res = getLead(event.query);
       return response.send(res);
       break;
     case 'POST':
+      postLead(event, context, response);
+      break;
     case 'PUT':
     case 'DELETE':
     default:
@@ -50,12 +56,19 @@ exports.handler = function(event, context) {
   }
 };
 
-function getMongoInfo () {
-  return {
-    name: db.name,
-    // user: db.user,
-    // pass: db.pass,
-    host: db.host,
-    port: db.port
-  };
+function postLead (event, context, response) {
+  var lead = new Lead(event.post);
+  lead.save(function (err, res) {
+    if (err) {
+      response.setHttpStatusCode(404);
+      return response.send(err); 
+    }
+    return response.send(res);
+  });
+};
+
+function getLead (query) {
+  Lead.find(query, function (err, lead) {
+    console.log(lead);
+  })
 };
