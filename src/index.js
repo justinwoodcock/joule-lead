@@ -41,7 +41,7 @@ exports.handler = function(event, context) {
       return response.send(res);
       break;
     case 'POST':
-      postLead(event, context, response);
+      postLead(event, response);
       break;
     case 'PUT':
     case 'DELETE':
@@ -56,7 +56,7 @@ exports.handler = function(event, context) {
   }
 };
 
-function postLead (event, context, response) {
+function postLead (event, response) {
   var lead = new Lead(event.post);
   lead.save(function (err, res) {
     if (err) {
