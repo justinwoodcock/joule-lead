@@ -19,7 +19,7 @@ var vehicleSchema = new Schema({
 
 var leadSchema = new Schema({
   name: String,
-  email: { type: String, required: true, unique: true },
+  email: String,
   phone: String,
   postalCode: String,
   drivers: [driverSchema],
