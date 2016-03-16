@@ -6,7 +6,8 @@ var driverSchema = new Schema({
   name: String,
   dob: Date,
   driversLicense: String,
-  state: String
+  state: String,
+  gender: String
 });
 
 var vehicleSchema = new Schema({
@@ -22,6 +23,7 @@ var leadSchema = new Schema({
   email: String,
   phone: String,
   postalCode: String,
+  acceptTerms: Boolean,
   drivers: [driverSchema],
   vehicles: [vehicleSchema],
   created_at: Date,
