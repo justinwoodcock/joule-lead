@@ -37,13 +37,13 @@ exports.handler = function(event, context) {
 
   switch (event.httpMethod) {
     case 'GET':
-      var res = getLead(event.query);
-      return response.send(res);
+      getLead(event, response);
       break;
     case 'POST':
       postLead(event, response);
       break;
     case 'PUT':
+      updateLead(event, response);
     case 'DELETE':
     default:
       var err = {
@@ -57,6 +57,14 @@ exports.handler = function(event, context) {
 };
 
 function postLead (event, response) {
+  if (!event.post.id) {
+    createLead(event, response);
+  } else {
+    updateLead(event, response);
+  }
+};
+
+function createLead (event, response) {
   var lead = new Lead(event.post);
   lead.save(function (err, res) {
     if (err) {
@@ -67,8 +75,22 @@ function postLead (event, response) {
   });
 };
 
-function getLead (query) {
-  Lead.find(query, function (err, lead) {
-    console.log(lead);
+function updateLead (event, response) {
+  Lead.findByIdAndUpdate(event.post.id, event.post, {}, function (err, res) {
+    if (err) {
+      response.setHttpStatusCode(404);
+      return response.send(err); 
+    }
+    return response.send(res);
+  });
+};
+
+function getLead (event, response) {
+  Lead.find(event.query, function (err, res) {
+    if (err) {
+      response.setHttpStatusCode(404);
+      return response.send(err); 
+    }
+    return response.send(res);
   })
 };
