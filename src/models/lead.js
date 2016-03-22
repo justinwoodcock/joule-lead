@@ -7,7 +7,8 @@ var driverSchema = new Schema({
   dob: Date,
   driversLicense: String,
   state: String,
-  gender: String
+  gender: String,
+  currentlyInsured: Boolean
 });
 
 var vehicleSchema = new Schema({
@@ -15,7 +16,11 @@ var vehicleSchema = new Schema({
   make: String,
   model: String,
   style: String,
-  trim: String
+  trim: String,
+  coverageLevel: String,
+  annualMileage: String,
+  comprehensive: String,
+  collision: String
 });
 
 var leadSchema = new Schema({
